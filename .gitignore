@@ -1,0 +1,5 @@
+__pycache__/
+venv/
+.env
+index_vectors.npy
+index_meta.json
