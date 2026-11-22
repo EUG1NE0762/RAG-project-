@@ -1,4 +1,12 @@
 streamlit
+fastembed
 pypdf
-google-genai
-numpy
+python-dotenv
+pydantic
+rank_bm25
+chromadb==1.0.20
+langchain-core==0.3.75
+langchain-community==0.3.29
+langchain-text-splitters==0.3.9
+langchain-chroma==0.2.5
+langchain-google-genai==2.1.12

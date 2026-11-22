@@ -1,5 +1,8 @@
 __pycache__/
 venv/
+.venv/
 .env
+db/
 index_vectors.npy
 index_meta.json
+models/
