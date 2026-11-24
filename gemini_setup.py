@@ -33,8 +33,13 @@ EMBEDDING_MODEL = "models/gemini-embedding-001"        # used only when EMBEDDIN
 
 # Chat (answer-writing) models, tried in order by get_chat_model(). The Gemini free tier
 # limits each model per day, so if one is used up, busy or too slow, the next one answers.
-# Ordered fastest first (measured: flash-lite ~1.4s, 2.5-flash ~1.7s, 3.5-flash ~24s).
-CHAT_MODELS = ["gemini-3.1-flash-lite", "gemini-2.5-flash", "gemini-3.5-flash"]
+# Ordered fastest first. Measured Nov 2026: 2.5-flash with thinking off is the most consistent
+# (~1.6-3s), 3.1-flash-lite swings between 2s and 19s, 3.5-flash is slowest (~24s).
+CHAT_MODELS = ["gemini-2.5-flash", "gemini-3.1-flash-lite", "gemini-3.5-flash"]
+
+# Per-model extra settings. thinking_budget=0 turns off 2.5-flash's hidden "thinking" step,
+# which was adding ~3s before the first word for short, document-grounded answers.
+MODEL_SETTINGS = {"gemini-2.5-flash": {"thinking_budget": 0}}
 
 # Shared paths so every step reads/writes the same place
 SLIDES_PATH = "slides"                                  # input: lecture PDFs
@@ -86,8 +91,9 @@ def get_chat_model(**kwargs):
     Extra keyword arguments (e.g. temperature=0) are passed to every model.
     """
     kwargs.setdefault("max_retries", 0)   # don't retry the same model: move to the next one at once
-    kwargs.setdefault("timeout", 30)      # a stuck model hands over after 30s instead of hanging
-    models = [ChatGoogleGenerativeAI(model=m, google_api_key=_api_key(), **kwargs) for m in CHAT_MODELS]
+    kwargs.setdefault("timeout", 12)      # a stuck model hands over after 12s instead of hanging
+    models = [ChatGoogleGenerativeAI(model=m, google_api_key=_api_key(), **{**MODEL_SETTINGS.get(m, {}), **kwargs})
+              for m in CHAT_MODELS]
     return models[0].with_fallbacks(models[1:]) if len(models) > 1 else models[0]
 
 
@@ -135,9 +141,9 @@ def quota_message(error):
     wait = f" Google says to retry in {wait.group(1).split('.')[0]}s." if wait else ""
     which = "embedding (search)" if "mbed" in msg else "chat"
     if "PerDay" in msg:
-        return (f"⚠️ The daily Gemini free-tier {which} quota is used up, so waiting a minute won't help."
+        return (f":material/warning: The daily Gemini free-tier {which} quota is used up, so waiting a minute won't help."
                 f"{wait} It resets daily (midnight US Pacific), or use a paid API key.")
-    return f"⚠️ Gemini per-minute {which} rate limit hit (free tier).{wait or ' Wait a minute and try again.'}"
+    return f":material/warning: Gemini per-minute {which} rate limit hit (free tier).{wait or ' Wait a minute and try again.'}"
 
 
 def reciprocal_rank_fusion(chunk_lists, weights=None, k=60):

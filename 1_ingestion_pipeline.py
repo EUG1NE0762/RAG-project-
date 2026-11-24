@@ -165,7 +165,7 @@ def main():
     else:
         vectorstore = create_vector_store(chunks, PERSIST_DIR, batch_size=256, pause_seconds=0)  # local: no limits
 
-    print("\n✅ Ingestion complete! Your slides are now ready for RAG queries.")
+    print("\nIngestion complete! Your slides are now ready for RAG queries.")
     return vectorstore
 
 

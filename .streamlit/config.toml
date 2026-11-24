@@ -1,0 +1,20 @@
+# Streamlit theme for the Frost UI (app.py loads assets/frost.css on top of this).
+# Defining both [theme.light] and [theme.dark] turns on the light/dark switch in the app's
+# menu (top right, three dots, Settings). The default, "Use system setting", follows the OS.
+[theme]
+font = "sans serif"
+
+[theme.light]
+primaryColor = "#0F766E"            # teal: buttons, slider, focus rings
+backgroundColor = "#EEF4F8"         # icy base under the gradient
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#1F2A37"
+
+[theme.dark]
+primaryColor = "#14B8A6"            # brighter teal so it stands out on the dark background
+backgroundColor = "#0B1220"         # deep navy base under the gradient
+secondaryBackgroundColor = "#162131"
+textColor = "#E6EDF3"
+
+[client]
+toolbarMode = "viewer"              # hide developer menu items, keep the theme switch

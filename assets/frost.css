@@ -1,0 +1,161 @@
+/* ──────────────────────────────────────────────────────────────────
+   Frost UI — frosted-glass theme for the Lecture Slides Assistant.
+   Loaded by app.py. Panels are translucent with a background
+   blur ("backdrop-filter") over a soft gradient.
+
+   Dark (default) and light mode: every colour below is written as
+   light-dark(<light value>, <dark value>). Streamlit sets the CSS
+   `color-scheme` on the app to match its active theme (app menu →
+   Settings), and the browser picks the matching value, so the panels
+   switch instantly together with Streamlit's own widgets.
+   ────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.stApp, [data-testid="stSidebar"] {
+  --ink:          light-dark(#1F2A37, #E6EDF3);
+  --muted:        light-dark(#5B6675, #9AA7B4);
+  --teal:         light-dark(#0F766E, #2DD4BF);
+  --teal-fill:    #0F766E;                                    /* solid fills behind white text */
+  --teal-soft:    light-dark(rgba(15, 118, 110, 0.10), rgba(45, 212, 191, 0.12));
+  --teal-line:    light-dark(rgba(15, 118, 110, 0.18), rgba(45, 212, 191, 0.25));
+  --teal-hover:   light-dark(rgba(15, 118, 110, 0.35), rgba(45, 212, 191, 0.45));
+  --glass:        light-dark(rgba(255, 255, 255, 0.55), rgba(22, 33, 49, 0.55));
+  --glass-strong: light-dark(rgba(255, 255, 255, 0.72), rgba(22, 33, 49, 0.78));
+  --glass-soft:   light-dark(rgba(255, 255, 255, 0.45), rgba(22, 33, 49, 0.40));
+  --glass-border: light-dark(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.08));
+  --sidebar-bg:   light-dark(rgba(255, 255, 255, 0.50), rgba(11, 18, 32, 0.60));
+  --user-bubble:  light-dark(rgba(204, 240, 235, 0.55), rgba(20, 184, 166, 0.10));
+  --user-avatar:  light-dark(#CBD5E1, #334155);
+  --shadow:       light-dark(0 8px 32px rgba(31, 42, 55, 0.08), 0 8px 32px rgba(0, 0, 0, 0.35));
+  --shadow-sm:    light-dark(0 4px 18px rgba(31, 42, 55, 0.05), 0 4px 18px rgba(0, 0, 0, 0.25));
+  --radius: 18px;
+}
+
+/* ── Base: font + gradient background with soft colour blobs ── */
+html, body, [class*="css"], .stMarkdown, button, input, textarea, select {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif !important;
+}
+[data-testid="stAppViewContainer"] {
+  background:
+    radial-gradient(circle at 12% 18%, light-dark(rgba(125, 211, 252, 0.45), rgba(14, 116, 144, 0.30)) 0, transparent 38%),
+    radial-gradient(circle at 88% 12%, light-dark(rgba(167, 243, 208, 0.45), rgba(15, 118, 110, 0.28)) 0, transparent 36%),
+    radial-gradient(circle at 75% 85%, light-dark(rgba(196, 181, 253, 0.35), rgba(91, 33, 182, 0.22)) 0, transparent 40%),
+    linear-gradient(160deg, light-dark(#F3F8FB, #0B1220) 0%, light-dark(#E8F1F6, #0E1726) 55%, light-dark(#EEF0FA, #111427) 100%);
+  background-attachment: fixed;
+}
+[data-testid="stHeader"] { background: transparent; }
+[data-testid="stMainBlockContainer"], .block-container { max-width: 900px; padding-top: 2.2rem; }
+footer, [data-testid="stDecoration"], [data-testid="stAppDeployButton"] { display: none !important; }
+
+/* ── Shared glass panel ── */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* ── Hero header ── */
+.hero { padding: 26px 30px 22px; margin-bottom: 18px; }
+.hero .eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--teal);
+}
+.hero h1 {
+  font-size: 30px !important; font-weight: 700 !important; color: var(--ink) !important;
+  margin: 4px 0 6px !important; padding: 0 !important; line-height: 1.2 !important;
+}
+.hero p { color: var(--muted); font-size: 15px; margin: 0 0 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500;
+  background: var(--glass-strong); border: 1px solid var(--glass-border); color: var(--ink);
+}
+.chip .ico { flex: none; color: var(--teal); }
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,.18); }
+
+/* ── Section label ── */
+.label { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 6px 2px 10px; }
+
+/* ── Buttons (suggestions, clear chat) ── */
+.stButton > button {
+  background: var(--glass); border: 1px solid var(--glass-border); color: var(--ink);
+  border-radius: 14px; padding: 14px 16px; text-align: left; justify-content: flex-start;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-sm);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  min-height: 64px; white-space: normal; line-height: 1.35; font-weight: 500;
+}
+.stButton > button:hover {
+  background: var(--glass-strong); border-color: var(--teal-hover); color: var(--teal);
+  transform: translateY(-1px); box-shadow: 0 8px 24px var(--teal-soft);
+}
+.stButton > button:focus:not(:active) { border-color: var(--teal); color: var(--teal); }
+
+/* ── Chat messages ── */
+[data-testid="stChatMessage"] {
+  background: var(--glass);
+  backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--glass-border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 16px 18px; margin-bottom: 12px;
+}
+/* the user's own messages get a teal tint */
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
+  background: var(--user-bubble);
+}
+[data-testid="stChatMessageAvatarUser"], [data-testid="stChatMessageAvatarAssistant"] {
+  border-radius: 12px;
+}
+[data-testid="stChatMessageAvatarAssistant"] { background: var(--teal-fill); color: white; }
+[data-testid="stChatMessageAvatarUser"] { background: var(--user-avatar); color: var(--ink); }
+
+/* "Searched for" caption + source chips under an answer */
+.searched { font-size: 12.5px; color: var(--muted); margin: 8px 0 4px; }
+.searched b { color: var(--ink); font-weight: 600; }
+.sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.src {
+  font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 999px;
+  background: var(--teal-soft); color: var(--teal); border: 1px solid var(--teal-line);
+}
+
+/* Expander (slide excerpts) */
+[data-testid="stExpander"] details {
+  background: var(--glass-soft); border: 1px solid var(--glass-border); border-radius: 12px;
+}
+[data-testid="stExpander"] summary { font-size: 13px; color: var(--muted); }
+
+/* ── Chat input bar: frosted, floating ── */
+[data-testid="stBottom"], [data-testid="stBottom"] > div, [data-testid="stBottomBlockContainer"] { background: transparent !important; }
+[data-testid="stChatInput"] {
+  background: var(--glass-strong) !important;
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border) !important; border-radius: 16px !important;
+  box-shadow: var(--shadow);
+}
+[data-testid="stChatInput"]:focus-within { border-color: var(--teal-hover) !important; }
+[data-testid="stChatInputSubmitButton"] { background: var(--teal-fill) !important; color: white !important; border-radius: 10px !important; }
+
+/* ── Sidebar: frosted panel ── */
+[data-testid="stSidebar"] {
+  background: var(--sidebar-bg) !important;
+  backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border-right: 1px solid var(--glass-border);
+}
+[data-testid="stSidebar"] .brand { display: flex; align-items: center; gap: 10px; margin: 4px 0 18px; }
+[data-testid="stSidebar"] .brand .logo {
+  width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center;
+  background: linear-gradient(135deg, #14B8A6, #0F766E); color: white; font-weight: 700; font-size: 16px;
+  box-shadow: 0 6px 16px rgba(15,118,110,.30);
+}
+[data-testid="stSidebar"] .brand .name { font-weight: 700; color: var(--ink); line-height: 1.1; }
+[data-testid="stSidebar"] .brand .sub { font-size: 12px; color: var(--muted); }
+.side-card { padding: 14px 16px; margin: 6px 0 14px; }
+.side-card .row { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; color: var(--muted); }
+.side-card .row b { color: var(--ink); font-weight: 600; }
+.method-help { font-size: 12.5px; color: var(--muted); margin: -4px 0 12px; line-height: 1.45; }
+[data-testid="stSidebar"] .stButton > button { min-height: 40px; justify-content: center; text-align: center; }
+
+/* Inputs inside the sidebar */
+[data-baseweb="select"] > div { background: var(--glass-strong) !important; border-radius: 12px !important; border-color: var(--glass-border) !important; }
