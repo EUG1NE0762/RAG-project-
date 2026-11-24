@@ -49,6 +49,7 @@ messages = [
 ]
 
 result = model.invoke(messages)   # returns an AIMessage; the text is in .content
+                                     # returns an AIMessage; the text is in .content
 
 print("\n--- Generated Response ---")
 print(result.content)
