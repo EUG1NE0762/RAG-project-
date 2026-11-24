@@ -16,7 +16,7 @@ from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from gemini_setup import get_chat_model, get_vector_store, describe
 
 load_dotenv()
-
+# Connect to the slide database and the chat model
 # Connect to the slide database and the chat model
 db = get_vector_store()
 model = get_chat_model()
