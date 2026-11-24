@@ -1,5 +1,5 @@
 """
-app.py — browser chat for the lecture-slides RAG pipeline (Streamlit), styled with the Frost UI.
+app.py — browser chat for the lecture-slides RAG pipeline (Streamlit), styled with the Cyber UI.
 
 Combines every step: history-aware question rewriting (step 4), a choice of retrieval method
 (steps 2, 5, 6), grounded answer generation (step 3), streamed answers and source citations.
@@ -10,7 +10,8 @@ How Streamlit works: the whole script re-runs top to bottom on every interaction
 question, each click). st.session_state keeps data between runs (the chat), and
 @st.cache_resource keeps expensive objects (models, database) loaded once.
 
-Look and feel: assets/frost.css (frosted-glass panels) + .streamlit/config.toml (theme colours).
+Look and feel: assets/cyber.css (futuristic HUD, the default) + .streamlit/config.toml (theme colours).
+The older frosted-glass look is kept in assets/frost.css; set CSS_PATH to it to switch back.
 """
 import html
 import os
@@ -26,25 +27,27 @@ st.set_page_config(page_title="Lecture Slides Assistant", page_icon=":material/m
                    initial_sidebar_state="auto")   # auto = collapsed on phones
 
 
-# ---------- Frost UI styling ----------
+# ---------- Cyber UI styling ----------
 
 @st.cache_data
-def load_css(path="assets/frost.css"):
-    """Read the stylesheet once; it is injected on every rerun."""
+def load_css(path, modified):
+    """Read the stylesheet once per version; it is injected on every rerun.
+    `modified` (the file's timestamp) is part of the cache key, so edits show up on refresh."""
     with open(path, encoding="utf-8") as f:
         return f.read()
 
 
-st.markdown(f"<style>{load_css()}</style>", unsafe_allow_html=True)
+CSS_PATH = "assets/cyber.css"
+st.markdown(f"<style>{load_css(CSS_PATH, os.path.getmtime(CSS_PATH))}</style>", unsafe_allow_html=True)
 
 # Dark mode by default. .streamlit/config.toml defines a light and a dark theme, and Streamlit
 # remembers the visitor's choice (app menu → Settings) in the browser under "stActiveTheme-…".
 # On a visitor's first load we switch that to "Dark" and reload once, marking it done with our
-# own "frostDarkDefault" key; after that the visitor's own choice (Light / Dark / System) is kept.
+# own "cyberDarkDefault" key; after that the visitor's own choice (Light / Dark / System) is kept.
 st.html("""<script>(() => {
   try {
-    if (localStorage.getItem("frostDarkDefault")) return;
-    localStorage.setItem("frostDarkDefault", "1");
+    if (localStorage.getItem("cyberDarkDefault")) return;
+    localStorage.setItem("cyberDarkDefault", "1");
     localStorage.setItem(`stActiveTheme-${window.location.pathname}-v2`, JSON.stringify("Dark"));
     location.reload();
   } catch (e) {}   /* storage blocked (private window): fall back to the system setting */
@@ -144,7 +147,7 @@ with st.sidebar:
         f'<div class="row"><span>Answer model</span><b>{html.escape(CHAT_MODELS[0])}</b></div>'
         '</div>', unsafe_allow_html=True)
 
-    if st.button("New chat", icon=":material/refresh:", use_container_width=True):
+    if st.button("New chat", icon=":material/refresh:", width="stretch"):
         st.session_state.messages = []
         st.rerun()
 
@@ -166,7 +169,7 @@ st.markdown(
     '<h1>Ask your BSE2201 slides anything</h1>'
     '<p>Answers come only from the lecture material, with the exact slides they were taken from.</p>'
     '<div class="chips">'
-    '<span class="chip"><span class="dot"></span>Ready</span>'
+    '<span class="chip"><span class="dot"></span>Online</span>'
     f'<span class="chip">{ICONS["book"]}{n_files} units · {len(all_docs)} chunks</span>'
     f'<span class="chip">{ICONS["search"]}{html.escape(method)}</span>'
     f'<span class="chip">{ICONS["layers"]}k = {k}</span>'
@@ -176,6 +179,13 @@ st.markdown(
 # ---------- Chat rendering helpers ----------
 
 AVATARS = {"user": ":material/person:", "assistant": ":material/auto_awesome:"}
+
+
+def chat_bubble(role, i):
+    """A chat message wrapped in a keyed container, so the CSS can style user and assistant
+    turns differently via the generated .st-key-msg-user-<i> / .st-key-msg-assistant-<i> class."""
+    with st.container(key=f"msg-{role}-{i}"):
+        return st.chat_message(role, avatar=AVATARS[role])
 
 
 def short_label(label):
@@ -203,8 +213,8 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Re-draw the previous messages (Streamlit redraws the whole page on every run)
-for m in st.session_state.messages:
-    with st.chat_message(m["role"], avatar=AVATARS[m["role"]]):
+for i, m in enumerate(st.session_state.messages):
+    with chat_bubble(m["role"], i):
         st.markdown(m["content"])
         if m["role"] == "assistant":
             show_sources(m.get("sources"), m.get("search"))
@@ -215,7 +225,7 @@ if not st.session_state.messages:
     st.markdown('<div class="label">Try one of these</div>', unsafe_allow_html=True)
     cols = st.columns(2)
     for i, s in enumerate(SUGGESTIONS):
-        if cols[i % 2].button(s, key=f"suggest-{i}", use_container_width=True):
+        if cols[i % 2].button(s, key=f"suggest-{i}", width="stretch"):
             clicked = s
 
 
@@ -244,10 +254,10 @@ question = st.chat_input("Ask about your lecture units…") or clicked
 if question:
     history = history_as_messages()                 # history BEFORE this question
     st.session_state.messages.append({"role": "user", "content": question})
-    with st.chat_message("user", avatar=AVATARS["user"]):
+    with chat_bubble("user", len(st.session_state.messages) - 1):
         st.markdown(question)
 
-    with st.chat_message("assistant", avatar=AVATARS["assistant"]):
+    with chat_bubble("assistant", len(st.session_state.messages)):
         try:
             with st.spinner("Searching your slides…"):
                 # Step 1: make the question standalone using chat history (only needed for follow-ups)

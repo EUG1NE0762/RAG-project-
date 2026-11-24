@@ -1,20 +1,20 @@
-# Streamlit theme for the Frost UI (app.py loads assets/frost.css on top of this).
+# Streamlit theme for the Cyber UI (app.py loads assets/cyber.css on top of this).
 # Defining both [theme.light] and [theme.dark] turns on the light/dark switch in the app's
-# menu (top right, three dots, Settings). The default, "Use system setting", follows the OS.
+# menu (top right, three dots, Settings). app.py makes dark the default on a first visit.
 [theme]
 font = "sans serif"
 
 [theme.light]
-primaryColor = "#0F766E"            # teal: buttons, slider, focus rings
-backgroundColor = "#EEF4F8"         # icy base under the gradient
+primaryColor = "#0E7490"            # deep cyan: slider, focus rings
+backgroundColor = "#F4F7FB"
 secondaryBackgroundColor = "#FFFFFF"
-textColor = "#1F2A37"
+textColor = "#0F172A"
 
 [theme.dark]
-primaryColor = "#14B8A6"            # brighter teal so it stands out on the dark background
-backgroundColor = "#0B1220"         # deep navy base under the gradient
-secondaryBackgroundColor = "#162131"
-textColor = "#E6EDF3"
+primaryColor = "#22D3EE"            # neon cyan
+backgroundColor = "#05060A"         # deep black under the grid
+secondaryBackgroundColor = "#0D1322"
+textColor = "#E2E8F0"
 
 [client]
 toolbarMode = "viewer"              # hide developer menu items, keep the theme switch

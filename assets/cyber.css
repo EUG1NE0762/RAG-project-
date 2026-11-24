@@ -1,0 +1,235 @@
+/* ──────────────────────────────────────────────────────────────────
+   Cyber UI — futuristic HUD theme for the Lecture Slides Assistant
+   (the default design; assets/frost.css is the older frosted-glass look).
+
+   Deep black background with a faint grid, neon highlights (cyan,
+   pink, purple), geometric lines and HUD-style corner brackets.
+
+   Dark (default) and light mode: colours are written as
+   light-dark(<light value>, <dark value>). Streamlit sets the CSS
+   `color-scheme` on the app to match its active theme (app menu →
+   Settings), and the browser picks the matching value.
+   ────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+.stApp, [data-testid="stSidebar"] {
+  --ink:        light-dark(#0F172A, #E2E8F0);
+  --muted:      light-dark(#475569, #8B9BB4);
+  --cyan:       light-dark(#0E7490, #22D3EE);
+  --pink:       light-dark(#BE185D, #F472B6);
+  --purple:     light-dark(#6D28D9, #A78BFA);
+  --green:      light-dark(#047857, #34D399);
+  --panel:      light-dark(rgba(255, 255, 255, 0.82), rgba(8, 12, 22, 0.82));
+  --panel-2:    light-dark(rgba(241, 245, 249, 0.92), rgba(13, 19, 34, 0.90));
+  --line:       light-dark(rgba(14, 116, 144, 0.28), rgba(34, 211, 238, 0.22));
+  --line-hi:    light-dark(rgba(14, 116, 144, 0.65), rgba(34, 211, 238, 0.70));
+  --pink-line:  light-dark(rgba(190, 24, 93, 0.30), rgba(244, 114, 182, 0.35));
+  --cyan-soft:  light-dark(rgba(14, 116, 144, 0.08), rgba(34, 211, 238, 0.08));
+  --pink-soft:  light-dark(rgba(190, 24, 93, 0.06), rgba(244, 114, 182, 0.07));
+  --purple-soft:light-dark(rgba(109, 40, 217, 0.08), rgba(167, 139, 250, 0.10));
+  --glow:       light-dark(0 0 0 transparent, 0 0 18px rgba(34, 211, 238, 0.35));
+  --glow-pink:  light-dark(0 0 0 transparent, 0 0 18px rgba(244, 114, 182, 0.35));
+  --grid:       light-dark(rgba(14, 116, 144, 0.07), rgba(34, 211, 238, 0.05));
+  --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  --display: 'Orbitron', 'JetBrains Mono', sans-serif;
+  --bracket: 14px;                                    /* HUD corner bracket length */
+}
+
+/* ── Base: fonts + deep black background with a grid and neon haze ── */
+html, body, [class*="css"], .stMarkdown, button, input, textarea, select {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif !important;
+}
+[data-testid="stAppViewContainer"] {
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 40px 40px,
+    radial-gradient(ellipse at 10% 0%, light-dark(rgba(34, 211, 238, 0.14), rgba(34, 211, 238, 0.16)) 0, transparent 45%),
+    radial-gradient(ellipse at 95% 15%, light-dark(rgba(244, 114, 182, 0.10), rgba(244, 114, 182, 0.12)) 0, transparent 40%),
+    radial-gradient(ellipse at 70% 100%, light-dark(rgba(167, 139, 250, 0.12), rgba(139, 92, 246, 0.16)) 0, transparent 50%),
+    light-dark(#F4F7FB, #05060A);
+  background-attachment: fixed;
+}
+[data-testid="stHeader"] { background: transparent; }
+[data-testid="stMainBlockContainer"], .block-container { max-width: 920px; padding-top: 2.2rem; }
+footer, [data-testid="stDecoration"], [data-testid="stAppDeployButton"] { display: none !important; }
+::selection { background: var(--pink); color: #05060A; }
+
+/* ── HUD panel: dark plate, thin neon outline, cyan corner brackets ── */
+.glass, [data-testid="stChatMessage"] { position: relative; }
+.glass {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.glass::before, [data-testid="stChatMessage"]::before {
+  content: ""; position: absolute; inset: -1px; pointer-events: none;
+  --c: var(--cyan);
+  background:
+    linear-gradient(var(--c), var(--c)) top left    / var(--bracket) 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) top left    / 2px var(--bracket) no-repeat,
+    linear-gradient(var(--c), var(--c)) top right   / var(--bracket) 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) top right   / 2px var(--bracket) no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / var(--bracket) 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / 2px var(--bracket) no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right/ var(--bracket) 2px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right/ 2px var(--bracket) no-repeat;
+}
+
+/* ── Hero header ── */
+.hero { padding: 28px 30px 24px; margin-bottom: 22px; overflow: hidden; }
+/* geometric accent: a neon diagonal slash and a scan line along the top edge */
+.hero::after {
+  content: ""; position: absolute; top: 0; right: 0; width: 220px; height: 100%; pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 46%, var(--pink-line) 46% 47%, transparent 47% 58%, var(--line) 58% 58.6%, transparent 58.6%),
+    linear-gradient(90deg, transparent, var(--cyan)) top right / 60% 1px no-repeat;
+}
+.hero .eyebrow {
+  font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--cyan);
+}
+.hero .eyebrow::before { content: "// "; color: var(--pink); }
+.hero h1 {
+  font-family: var(--display) !important; font-size: 30px !important; font-weight: 700 !important;
+  letter-spacing: .02em; line-height: 1.25 !important; margin: 8px 0 8px !important; padding: 0 !important;
+  color: var(--ink) !important;
+  background: linear-gradient(90deg, var(--cyan), var(--purple) 55%, var(--pink));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero p { color: var(--muted); font-size: 15px; margin: 0 0 16px; max-width: 620px; }
+
+/* HUD readout tags */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px; border-radius: 2px;
+  font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase;
+  background: var(--cyan-soft); border: 1px solid var(--line); color: var(--ink);
+  border-left: 2px solid var(--cyan);
+}
+.chip .ico { flex: none; color: var(--cyan); }
+.chip .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 0 3px light-dark(rgba(4, 120, 87, .15), rgba(52, 211, 153, .18)), 0 0 10px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .chip .dot { animation: none; } }
+
+/* ── Section label: monospace HUD caption with a trailing rule ── */
+.label {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--cyan); margin: 8px 2px 12px;
+}
+.label::before { content: "//"; color: var(--pink); }
+.label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-hi), transparent); }
+
+/* ── Buttons (suggestions, new chat) ── */
+.stButton > button {
+  background: var(--panel); border: 1px solid var(--line); color: var(--ink);
+  border-radius: 3px; padding: 14px 16px; text-align: left; justify-content: flex-start;
+  min-height: 64px; white-space: normal; line-height: 1.4; font-weight: 500;
+  transition: border-color .15s ease, box-shadow .15s ease, color .15s ease, background .15s ease;
+}
+.stButton > button:hover {
+  border-color: var(--cyan); color: var(--cyan); background: var(--cyan-soft);
+  box-shadow: var(--glow), inset 3px 0 0 var(--cyan);
+}
+.stButton > button:focus:not(:active) { border-color: var(--cyan); color: var(--cyan); }
+.stButton > button:active { border-color: var(--pink); color: var(--pink); box-shadow: var(--glow-pink); }
+
+/* ── Chat messages ── */
+[data-testid="stChatMessage"] {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 4px;
+  padding: 16px 18px; margin-bottom: 14px;
+  box-shadow: inset 3px 0 0 var(--cyan);
+}
+/* the user's own messages: pink accent instead of cyan */
+[class*="st-key-msg-user"] [data-testid="stChatMessage"] {
+  background: var(--pink-soft); border-color: var(--pink-line); box-shadow: inset 3px 0 0 var(--pink);
+}
+[class*="st-key-msg-user"] [data-testid="stChatMessage"]::before { --c: var(--pink); }
+/* avatars (app.py wraps each turn in a container keyed msg-user-<i> / msg-assistant-<i>) */
+[data-testid="stChatMessage"] [data-testid^="stChatMessageAvatar"] {
+  border-radius: 3px;
+  background: light-dark(#0E7490, #0B2A33); color: light-dark(#FFFFFF, #22D3EE);
+  border: 1px solid var(--cyan); box-shadow: var(--glow);
+}
+[class*="st-key-msg-user"] [data-testid^="stChatMessageAvatar"] {
+  background: light-dark(#BE185D, #2A0F1F); color: light-dark(#FFFFFF, #F472B6);
+  border: 1px solid var(--pink); box-shadow: var(--glow-pink);
+}
+
+/* "Searched for" caption + source tags under an answer */
+.searched { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 10px 0 4px; }
+.searched::before { content: "> "; color: var(--cyan); }
+.searched b { color: var(--ink); font-weight: 600; }
+.sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.src {
+  font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: .03em;
+  padding: 3px 9px; border-radius: 2px;
+  background: var(--purple-soft); color: var(--purple); border: 1px solid light-dark(rgba(109, 40, 217, .25), rgba(167, 139, 250, .30));
+}
+.src::before { content: "#"; opacity: .6; margin-right: 3px; }
+
+/* Expander (slide excerpts) */
+[data-testid="stExpander"] details {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 3px;
+}
+[data-testid="stExpander"] summary { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); }
+[data-testid="stExpander"] summary:hover { color: var(--cyan); }
+
+/* ── Chat input: terminal-style command bar ── */
+[data-testid="stBottom"], [data-testid="stBottom"] > div, [data-testid="stBottomBlockContainer"] { background: transparent !important; }
+[data-testid="stChatInput"] {
+  background: var(--panel-2) !important;
+  border: 1px solid var(--line-hi) !important; border-radius: 4px !important;
+  box-shadow: var(--glow);
+}
+[data-testid="stChatInput"]:focus-within { border-color: var(--cyan) !important; box-shadow: 0 0 0 1px var(--cyan), var(--glow); }
+[data-testid="stChatInput"] textarea { font-family: var(--mono) !important; font-size: 14px !important; }
+[data-testid="stChatInputSubmitButton"] {
+  background: var(--cyan) !important; color: light-dark(#FFFFFF, #05060A) !important; border-radius: 3px !important;
+}
+
+/* ── Sidebar: black HUD rail with a neon edge ── */
+[data-testid="stSidebar"] {
+  background: light-dark(rgba(255, 255, 255, 0.88), rgba(5, 7, 13, 0.92)) !important;
+  border-right: 1px solid var(--line-hi);
+  box-shadow: light-dark(none, 1px 0 18px rgba(34, 211, 238, 0.12));
+}
+[data-testid="stSidebar"] .brand { display: flex; align-items: center; gap: 12px; margin: 4px 0 22px; }
+[data-testid="stSidebar"] .brand .logo {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0 50%);   /* hexagon */
+  background: linear-gradient(135deg, #22D3EE, #8B5CF6 60%, #F472B6);
+  color: #05060A; font-family: var(--display); font-weight: 800; font-size: 16px;
+}
+[data-testid="stSidebar"] .brand .name {
+  font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink); line-height: 1.2;
+}
+[data-testid="stSidebar"] .brand .sub { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--cyan); }
+.side-card { padding: 12px 16px; margin: 6px 0 16px; }
+.side-card .row {
+  display: flex; justify-content: space-between; gap: 10px; padding: 6px 0;
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  border-bottom: 1px dashed var(--line);
+}
+.side-card .row:last-child { border-bottom: 0; }
+.side-card .row span { text-transform: uppercase; letter-spacing: .06em; }
+.side-card .row b { color: var(--cyan); font-weight: 600; text-align: right; }
+.method-help { font-size: 12.5px; color: var(--muted); margin: -4px 0 14px; line-height: 1.5; padding-left: 10px; border-left: 1px solid var(--pink-line); }
+[data-testid="stSidebar"] .stButton > button {
+  min-height: 40px; justify-content: center; text-align: center;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+}
+
+/* Inputs */
+[data-baseweb="select"] > div {
+  background: var(--panel-2) !important; border-radius: 3px !important; border-color: var(--line) !important;
+  font-family: var(--mono); font-size: 13px;
+}
+[data-testid="stSlider"] label p { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
