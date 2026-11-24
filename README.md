@@ -41,7 +41,49 @@ per day, so when one is used up the next one answers.
 5. Try the steps (`python 2_retrieval_pipeline.py`, `python 3_answer_generation.py`, ...) or start the chat app:
    ```powershell
    streamlit run app.py
-   ```
+
+   '''
+
+   ## macOS and Linux Installation
+
+The project can also be set up on macOS and Linux using the following commands.
+
+### 1. Create and activate a virtual environment
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 2. Install dependencies
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file in the project root and add your Gemini API key:
+
+```env
+GEMINI_API_KEY=your-key-here
+```
+
+### 4. Build the vector store
+
+```bash
+python 1_ingestion_pipeline.py
+```
+
+### 5. Launch the application
+
+```bash
+streamlit run app.py
+```
+
+**Note:** Make sure Python 3.10 or later is installed before starting the setup.
+   
 
 ## Documentation
 
