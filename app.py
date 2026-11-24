@@ -298,4 +298,7 @@ Please provide a clear, helpful answer using only the information from these doc
         rewritten = search_question if search_question and search_question != question else None
         show_sources(sources, rewritten)
 
-   
+        # Save the assistant turn so it is redrawn on the next run and used as history
+        st.session_state.messages.append({"role": "assistant", "content": answer, "sources": sources, "search": rewritten})
+        if clicked: #redraw without the suggestion button  
+            st.rerun()
