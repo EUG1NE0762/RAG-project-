@@ -65,3 +65,4 @@ for i, doc in enumerate(retriever.invoke(query), 1):
 # 3. "Why learn software metrics?"
 # 4. "What happens during the prototype phase of product maturity?"
 # 5. "How does configuration management protect quality?"
+# 3. "Why learn software metrics?"
