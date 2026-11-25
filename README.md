@@ -89,3 +89,20 @@ streamlit run app.py
 
 - `docs/RAG_Project_Documentation.pdf` — full technical documentation: architecture, each step, algorithms with formulas, fixes, performance measurements, how to run, troubleshooting and a glossary of terms.
 - `docs/RAG_Project_Presentation.pptx` — 15-slide presentation of the project.
+
+
+## Group Members
+
+| No. | Name | Student ID |
+|---|---|---|
+| 1 | Francis Sawanda | 2511069 |
+| 2 | Steven Mwila | 2511178 |
+| 3 | Bernad | 2511671 |
+| 4 | Kobee | 2510932 |
+| 5 | Zango | 2510271 |
+| 6 | Thandiwe Chikonda | 2511012 |
+| 7 | Jonathan Chipampe | 2511233 |
+| 8 | Lewis Kalamatila | 2510300 |
+| 9 | Diana Mbewe | 2510228 |
+
+
